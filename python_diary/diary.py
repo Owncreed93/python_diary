@@ -49,8 +49,34 @@ def add_entry():
             Entry.create(content=data)
             print("Your entry was saved succesfully")
 
-def view_entries():
+def view_entries(search_query=None):
     ''' View all entries '''
+    entries = Entry.select().order_by(Entry.timestamp.desc())
+
+    if search_query:
+        entries = entries.where(Entry.content.contains(search_query))
+
+    print("*****************************************")
+    for entry in entries:
+        formated_date = entry.timestamp.strftime('%A %B  %d, %Y %I:%M%p')
+        #print(f"Description: {entry.content} | Date:  {formated_date} \n")
+        print(formated_date)
+        print('+'*len(formated_date))
+        print(entry.content)
+        print('n) next entry')
+        print('q) return')
+        next_action = input("Action: ").lower().strip()
+
+        if next_action == 'q':
+            break 
+    print("*****************************************")
+    menu_loop()
+    
+
+def search_entries():
+    ''' Search in entries '''
+    search_query = input("Seach query : ").strip()
+    view_entries(search_query)
 
 def delete_entry():
     ''' Delete entry '''
@@ -58,6 +84,7 @@ def delete_entry():
 menu = OrderedDict([
     ('a', add_entry),
     ('v', view_entries),
+    ('s', search_entries),
     ('d', delete_entry)
 
 ])
