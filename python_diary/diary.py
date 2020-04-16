@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 db = SqliteDatabase('diary.db')
 
+# * AÑADIR LA OPCIÓN VER ENTRADA
 
 class Entry(Model):
     content = TextField()
@@ -62,15 +63,22 @@ def view_entries(search_query=None):
         #print(f"Description: {entry.content} | Date:  {formated_date} \n")
         print(formated_date)
         print('+'*len(formated_date))
-        print(entry.content)
+        print(f"{entry.content} \n")
+        print('+'*len(formated_date))
         print('n) next entry')
+        print('u) update entry')
+        print('d) delete entry')
         print('q) return')
-        next_action = input("Action: ").lower().strip()
+        next_action = input("Action: [Nudq]").lower().strip()
 
         if next_action == 'q':
-            break 
+            break
+        elif next_action == 'u':
+            update_entry(entry)
+        elif next_action == 'd':
+            delete_entry(entry)
     print("*****************************************")
-    menu_loop()
+    #menu_loop()
     
 
 def search_entries():
@@ -78,13 +86,27 @@ def search_entries():
     search_query = input("Seach query : ").strip()
     view_entries(search_query)
 
-def delete_entry():
+def update_entry(entry):
+    ''' Update an entry '''
+    entry.content = input("Update your entry : ").strip()
+    entry.timestamp = datetime.datetime.now()
+    confirm = input("Are you sure you want to update? [Yn]").lower().strip()
+    if confirm == 'y':
+        entry.save()
+
+
+def delete_entry(entry):
     ''' Delete entry '''
+    action = input("Are you sure?[Yn] ").lower().strip()
+
+    if action == 'y':
+        entry.delete_instance()
 
 menu = OrderedDict([
     ('a', add_entry),
     ('v', view_entries),
     ('s', search_entries),
+    ('u', update_entry),
     ('d', delete_entry)
 
 ])
