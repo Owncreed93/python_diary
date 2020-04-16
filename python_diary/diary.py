@@ -108,8 +108,8 @@ menu = OrderedDict([
     ('s', search_entries),
     ('u', update_entry),
     ('d', delete_entry)
-
 ])
+
 if __name__ == '__main__':
     # * EXECUTE FUNCTIONS IF YOU CALL THE SCRIPT FROM THE FILE
     create_and_connect()
