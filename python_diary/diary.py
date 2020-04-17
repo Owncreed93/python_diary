@@ -1,24 +1,26 @@
 import datetime
-import sys # * LIBRARY TO SEND MESSAGES TO THE USER
+# * LIBRARY TO SEND MESSAGES TO THE USER
+import sys
 
 from peewee import *
 from collections import OrderedDict
 
 db = SqliteDatabase('diary.db')
 
-# * AÑADIR LA OPCIÓN VER ENTRADA
 
 class Entry(Model):
-    content = TextField()
-    timestamp = DateTimeField(default=datetime.datetime.now())
+        content = TextField()
+        timestamp = DateTimeField(default=datetime.datetime.now())
 
-    class Meta:
-        database = db
+        class Meta:
+            database = db
+
 
 def create_and_connect():
     ''' Connects to the database and creates the tables '''
     db.connect()
     db.create_tables([Entry], safe=True)
+
 
 def menu_loop():
     # * docstring --> A description of the functionality
@@ -27,7 +29,7 @@ def menu_loop():
 
     while choice != 'q':
         print("Press 'q' to quit.")
-        for key,value in menu.items():
+        for key, value in menu.items():
             print(f"{key}) {value.__doc__}")
         choice = input("Action: ").lower().strip()
 
@@ -42,13 +44,16 @@ def menu_loop():
 
 def add_entry():
     ''' Add entry '''
-    print('Enter your thougst. Press ctrl + Z on Windows, ctrl + D on Linux and Mac to finish.')
+    print('''Enter your thougst. Press ctrl + Z
+          on Windows, ctrl + D on Linux and Mac to finish.''')
     data = sys.stdin.read().strip()
 
     if data:
-        if input("Do you want to save your entry: [Yn]").lower().strip() != 'n':
+        if input('''Do you want to save
+                    your entry: [Yn]''').lower().strip() != 'n':
             Entry.create(content=data)
             print("Your entry was saved succesfully")
+
 
 def view_entries(search_query=None):
     ''' View all entries '''
@@ -60,7 +65,7 @@ def view_entries(search_query=None):
     print("*****************************************")
     for entry in entries:
         formated_date = entry.timestamp.strftime('%A %B  %d, %Y %I:%M%p')
-        #print(f"Description: {entry.content} | Date:  {formated_date} \n")
+        # print(f"Description: {entry.content} | Date:  {formated_date} \n")
         print(formated_date)
         print('+'*len(formated_date))
         print(f"{entry.content} \n")
@@ -78,13 +83,14 @@ def view_entries(search_query=None):
         elif next_action == 'd':
             delete_entry(entry)
     print("*****************************************")
-    #menu_loop()
-    
+    # menu_loop()
+
 
 def search_entries():
     ''' Search in entries '''
     search_query = input("Seach query : ").strip()
     view_entries(search_query)
+
 
 def update_entry(entry):
     ''' Update an entry '''
@@ -109,6 +115,7 @@ menu = OrderedDict([
     ('u', update_entry),
     ('d', delete_entry)
 ])
+
 
 if __name__ == '__main__':
     # * EXECUTE FUNCTIONS IF YOU CALL THE SCRIPT FROM THE FILE
