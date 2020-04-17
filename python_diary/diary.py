@@ -116,10 +116,6 @@ menu = OrderedDict([
     ('d', delete_entry)
 ])
 
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
 if __name__ == '__main__':
     # * EXECUTE FUNCTIONS IF YOU CALL THE SCRIPT FROM THE FILE
     create_and_connect()
